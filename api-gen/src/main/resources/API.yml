@@ -5,12 +5,296 @@ info:
   description: Application for managing a bookshop
 servers:
   - url: http://localhost:8080
-    description: Local server
+    description: Bookshop server
+  - url: http://localhost:8081
+    description: Order server
 
 tags:
   - name: books
-    description: Operations with books
+  - name: authors
+  - name: orders
 
-paths: {}
 
-components: {}
+paths:
+  /books:
+    get:
+      tags:
+        - books
+      summary: Get all books
+      operationId: getBooks
+      responses:
+        "200":
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BookRetrieve"
+    post:
+      tags:
+        - books
+      summary: Create a book
+      operationId: createBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookCreate"
+      responses:
+        "201":
+          description: The book was created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookRetrieve"
+        "400":
+          description: Invalid input
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+  /books/{id}:
+    put:
+      tags:
+        - books
+      summary: Update a book
+      operationId: updateBook
+      parameters:
+        - $ref: "#/components/parameters/id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookUpdate"
+      responses:
+        "200":
+          description: The book was updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookRetrieve"
+        "400":
+          description: Invalid input
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+    delete:
+      tags:
+        - books
+      summary: Delete a book
+      operationId: deleteBook
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "204":
+          description: The book was deleted
+  /books/{id}/purchase:
+    post:
+      tags:
+        - books
+      summary: Purchase a book
+      operationId: purchaseBook
+      parameters:
+        - $ref: "#/components/parameters/id"
+      responses:
+        "200":
+          description: The book was purchased
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookRetrieve"
+
+  /authors:
+    get:
+      tags:
+        - authors
+      summary: Get all authors
+      operationId: getAuthors
+      responses:
+        "200":
+          description: A list of authors
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuthorRetrieve"
+    post:
+      tags:
+        - authors
+      summary: Create an author
+      operationId: createAuthor
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/AuthorCreate"
+      responses:
+        "201":
+          description: The author was created
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/AuthorRetrieve"
+        "400":
+          description: Invalid input
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/ValidationError"
+
+components:
+  schemas:
+    # Books
+    BookRetrieve:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        author:
+          $ref: "#/components/schemas/UUID"
+        title:
+          type: string
+          example: "The Lord of the Rings"
+        genre:
+          type: string
+          example: "Fantasy"
+        price:
+          type: number
+          example: 19.99
+        pages:
+          type: integer
+          example: 1178
+        views:
+          type: integer
+          example: 201
+        available:
+          type: integer
+          example: 5
+      required:
+        - id
+        - author
+        - title
+        - genre
+        - price
+        - pages
+        - views
+        - available
+    BookCreate:
+      type: object
+      properties:
+        author:
+          $ref: "#/components/schemas/UUID"
+        title:
+          type: string
+          example: "The Lord of the Rings"
+        genre:
+          type: string
+          example: "Fantasy"
+        price:
+          type: number
+          example: 19.99
+        pages:
+          type: integer
+          example: 1178
+        available:
+          type: integer
+          example: 5
+      required:
+        - author
+        - title
+        - genre
+        - price
+        - pages
+        - available
+    BookUpdate:
+      type: object
+      properties:
+        author:
+          $ref: "#/components/schemas/UUID"
+        title:
+          type: string
+          example: "The Lord of the Rings"
+        genre:
+          type: string
+          example: "Fantasy"
+        price:
+          type: number
+          example: 19.99
+        pages:
+          type: integer
+          example: 1178
+        available:
+          type: integer
+          example: 5
+
+    # Authors
+    AuthorRetrieve:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UUID"
+        name:
+          type: string
+          example: "J.R.R. Tolkien"
+      required:
+        - id
+        - name
+    AuthorCreate:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "J.R.R. Tolkien"
+      required:
+        - name
+
+    # Misc.
+    UUID:
+      type: string
+      format: uuid
+      example: 3d2370d4-b07a-47e3-9503-265be3925f7c
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Not found
+      required:
+        - message
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: name
+              message:
+                type: string
+                example: must not be null
+            required:
+              - name
+              - message
+      required:
+        - message
+        - errors
+
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      schema:
+        $ref: "#/components/schemas/UUID"

@@ -1,26 +1,27 @@
 # TODO
 
-1. [ ] Moduł `api-gen`
+1. [x] Moduł `api-gen`
    - [x] Generowanie API ze specyfikacji openapi
-   - [ ] Specyfikacja API
-     - [ ] Endpointy
-     - [ ] Modele
-     - [ ] Modele do obsługi błędów
+   - [x] Specyfikacja API
+     - [x] Endpointy
+     - [x] Modele
+     - [x] Modele do obsługi błędów
 2. [ ] Moduł `bookshop`
-   - [ ] Model książki
+   - [x] Model książki
      - Autor (fk)
+     - Tytuł
      - Gatunek
      - Cena
      - Ilość stron
      - Licznik odwiedzin
      - Ilość dostępnych sztuk
    - [ ] Operacje na książkach
-     - [ ] Dodawanie (admin)
-     - [ ] Usuwanie (admin)
-     - [ ] Edytowanie (admin)
-     - [ ] Wyświetlanie
+     - [x] Dodawanie (admin)
+     - [x] Usuwanie (admin)
+     - [x] Edytowanie (admin)
+     - [x] Wyświetlanie
      - [ ] Filtrowanie
-     - [ ] Kupowanie
+     - [ ] Kupowanie (zmniejsza dostępność o 1)
    - [ ] Dodawanie/usuwanie/edytowanie tylko dla adminów
    - [ ] Wyświetlenie książki (jako lista lub filtrując) powinno zwiększyć jej ilość odwiedzin
    - [ ] Endpoint `order-report` (admin) do wysyłania książek na `/orders` w module `book-order`
@@ -29,7 +30,7 @@
      - [ ] Przyjmuje `{id, name, visits}[]`
      - [ ] Dla każdych 10 odwiedzin zapisuje zamówienie do DB: `{id, amount}`
    - [ ] Endpoint GET `/print` do generowania zamówienia w formacie pdf
-4. [ ] Walidacja danych
-5. [ ] Obsługa błędów
+4. [x] Walidacja danych
+5. [x] Obsługa błędów
 6. [ ] Testy jednostkowe
 
