@@ -1,0 +1,16 @@
+openapi: "3.0.2"
+info:
+  title: Bookshop
+  version: "0.0.1-SNAPSHOT"
+  description: Application for managing a bookshop
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+tags:
+  - name: books
+    description: Operations with books
+
+paths: {}
+
+components: {}
